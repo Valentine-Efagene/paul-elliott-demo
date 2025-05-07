@@ -31,3 +31,29 @@ export class SendMailDto {
   @IsString()
   message: string
 }
+
+export class SendVerificationMailDto {
+  @ApiProperty({
+    nullable: false,
+    example: 'Johnny Ufuoma'
+  })
+  @IsNotEmpty()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({
+    nullable: false,
+    example: 'johnnyufuoma@testmail.com'
+  })
+  @IsNotEmpty()
+  @IsString()
+  link?: string;
+
+  @ApiProperty({
+    nullable: false,
+    example: 'johnnyufuoma@testmail.com'
+  })
+  @IsNotEmpty()
+  @IsString()
+  receiverEmail?: string;
+}

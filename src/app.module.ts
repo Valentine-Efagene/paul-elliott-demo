@@ -110,6 +110,7 @@ export class AppModule {
       .exclude(
         { path: 'auth/sign-up', method: RequestMethod.POST },
         { path: 'auth/sign-in', method: RequestMethod.POST },
+        { path: 'auth/verify-email', method: RequestMethod.GET },
         { path: 'properties(.*)', method: RequestMethod.POST },
         { path: 'mailer/(.*)', method: RequestMethod.POST },
       )

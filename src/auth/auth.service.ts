@@ -1,19 +1,22 @@
 
-import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from 'src/user/user.service';
 import { RefreshTokenDto, SignInDto, SignUpDto } from './auth.dto';
-import { User } from 'src/user/user.entity';
+import { User } from '../user/user.entity';
 import { IAccessTokenPayload, IAuthTokensAndUser, IJwtConfig } from './auth.type';
 import { RefreshTokenService } from 'src/refresh_token/refresh_token.service';
 import { accessTokenConfig, refreshTokenConfig } from './auth.constants';
+import { MailService } from '../mail/mail.service';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userService: UserService,
         private jwtService: JwtService,
+        private mailService: MailService,
         private refreshTokenService: RefreshTokenService,
     ) { }
 
@@ -34,20 +37,44 @@ export class AuthService {
         return null;
     }
 
-    async signUp(user: SignUpDto): Promise<IAuthTokensAndUser> {
+    async signUp(user: SignUpDto): Promise<string> {
         const existingUser = await this.userService.findOneByEmail(user.email);
 
         if (existingUser) {
             throw new BadRequestException('Email already exists');
         }
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        const newUserDto = { ...user, password: hashedPassword };
-        const newUser = await this.userService.create(newUserDto);
-        return this.signIn({
-            identifier: newUser.email,
-            password: user.password
-        });
+        const newUser = await this.userService.create(user);
+        const verificationToken = randomBytes(32).toString('hex');
+        const updated = await this.userService.updateOne(newUser.id, {
+            emailVerificationToken: verificationToken
+        })
+
+        if (!updated) {
+            throw new InternalServerErrorException('Something went wrong')
+        }
+
+        await this.mailService.sendEmailVerification({
+            link: `localhost:3100/auth/verify-email?token=${verificationToken}`,
+            name: 'Valentyne',
+            receiverEmail: newUser.email
+        })
+
+        return 'Account created. Please check for verification email.'
+    }
+
+    async verifyEmail(token: string) {
+        const user = await this.userService.findOneByEmailVerificationToken(token)
+
+        if (!user) {
+            throw new BadRequestException('Invalid token')
+        }
+
+        const updatedUser = await this.userService.updateOne(user.id, {
+            isEmailVerified: true,
+        })
+
+        return 'You may now proceed to log in.'
     }
 
     async generateJWT(payload: IAccessTokenPayload, config: IJwtConfig) {

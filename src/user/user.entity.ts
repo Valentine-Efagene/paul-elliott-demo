@@ -36,7 +36,10 @@ export class User extends BaseEntity {
   refreshTokens: RefreshToken[];
 
   @Column({ default: false })
-  emailVerified?: boolean;
+  isEmailVerified?: boolean;
+
+  @Column({ nullable: true })
+  emailVerificationToken: string | null
 
   @Column({ type: 'text', nullable: true })
   avatar?: string;

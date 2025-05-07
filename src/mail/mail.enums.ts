@@ -3,5 +3,6 @@ export enum PermissionsEnum {
 }
 
 export enum MailQueueJobNames {
-  SEND = 'SEND'
+  SEND = 'SEND',
+  SEND_VERIFICATION_MESSAGE = 'SEND_VERIFICATION_MESSAGE'
 }

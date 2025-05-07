@@ -9,6 +9,7 @@ import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { RefreshTokenModule } from 'src/refresh_token/refresh_token.module';
 import { JwtStrategy } from './strategy/jwt_strategy';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
     imports: [
@@ -18,7 +19,8 @@ import { JwtStrategy } from './strategy/jwt_strategy';
             secret: jwtConstants.secret,
             signOptions: { expiresIn: '60s' },
         }),
-        RefreshTokenModule
+        RefreshTokenModule,
+        MailModule
     ],
     controllers: [AuthController],
     providers: [AuthService, LocalStrategy, JwtStrategy],

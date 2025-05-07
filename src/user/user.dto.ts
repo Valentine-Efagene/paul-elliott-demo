@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
 // import { UserRole } from './user.enums';
 
 export class CreateUserDto {
@@ -46,6 +46,10 @@ export class UpdateUserDto {
   @IsOptional()
   lastName?: string;
 
+  @ApiPropertyOptional({ nullable: true, example: 'ewoieoiwueowh' })
+  @IsOptional()
+  emailVerificationToken?: string;
+
   @ApiPropertyOptional({ nullable: true, example: 'Aliqua laborum non ea aliquip ipsum dolor laborum amet aute sint non cillum dolore. Eu dolore ullamco anim est ullamco ipsum Lorem labore in aliquip proident commodo aute laborum. Reprehenderit proident esse laboris non irure cillum adipisicing ut occaecat deserunt anim. Cillum do nisi Lorem ipsum tempor exercitation irure laboris amet culpa labore. Culpa laborum consequat duis sit laboris do aute aliquip consectetur elit labore pariatur non.' })
   @IsOptional()
   bio?: string;
@@ -53,6 +57,13 @@ export class UpdateUserDto {
   @ApiPropertyOptional({ nullable: true, example: 'Aliqua laborum non ea aliquip ipsum' })
   @IsOptional()
   address?: string;
+
+  @ApiPropertyOptional({
+    type: 'boolean'
+  })
+  @IsOptional()
+  @IsBoolean()
+  isEmailVerified?: boolean
 }
 
 export class UpdateUserControllerDto extends UpdateUserDto {

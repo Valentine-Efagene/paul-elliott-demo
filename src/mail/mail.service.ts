@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { SendMailDto } from './mail.dto';
+import { SendMailDto, SendVerificationMailDto } from './mail.dto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { MailQueueJobNames } from './mail.enums';
@@ -26,5 +26,9 @@ export class MailService {
 
   async sendQueued(mailDto: SendMailDto): Promise<void> {
     const job = await this.mailQueue.add(MailQueueJobNames.SEND, mailDto)
+  }
+
+  async sendEmailVerification(mailDto: SendVerificationMailDto): Promise<void> {
+    const job = await this.mailQueue.add(MailQueueJobNames.SEND_VERIFICATION_MESSAGE, mailDto)
   }
 }

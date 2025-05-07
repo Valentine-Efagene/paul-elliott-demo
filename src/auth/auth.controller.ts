@@ -1,5 +1,5 @@
 
-import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto, SignInDto, SignUpDto } from './auth.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -39,11 +39,15 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('sign-up')
     async signUp(@Body() dto: SignUpDto): Promise<StandardApiResponse<string>> {
-        const { accessToken, user } = await this.authService.signUp(dto);
-        const response = await this.userService.assignRoles(user.id, {
-            roleIds: [1]
-        });
-        return new StandardApiResponse(HttpStatus.OK, ResponseMessage.CREATED, accessToken)
+        const response = await this.authService.signUp(dto);
+        return new StandardApiResponse(HttpStatus.OK, ResponseMessage.CREATED, response)
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get('verify-email')
+    async verifyEmail(@Query('token') token: string): Promise<StandardApiResponse<string>> {
+        const response = await this.authService.verifyEmail(token);
+        return new StandardApiResponse(HttpStatus.OK, ResponseMessage.CREATED, response)
     }
 
     @SwaggerAuth()
