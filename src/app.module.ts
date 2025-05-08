@@ -60,6 +60,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import AuthenticationMiddleware from './common/middleware/AuthenticationMiddleware';
 import { RefreshToken } from './refresh_token/refresh_token.entity';
 import { RefreshTokenModule } from './refresh_token/refresh_token.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -95,6 +96,7 @@ import { RefreshTokenModule } from './refresh_token/refresh_token.module';
     AuthModule,
     UserModule,
     RoleModule,
+    EventModule,
     PermissionModule,
     RefreshTokenModule,
     PasswordResetTokenModule,

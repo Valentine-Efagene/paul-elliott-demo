@@ -117,6 +117,10 @@ export class AuthService {
             throw new BadRequestException('Invalid credentials');
         }
 
+        if (!user.isEmailVerified) {
+            throw new BadRequestException('Please verify your email')
+        }
+
         const payload: IAccessTokenPayload = {
             sub: user.id,
             identifier: user.email,

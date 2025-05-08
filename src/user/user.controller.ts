@@ -13,6 +13,7 @@ import {
   Put,
   Patch,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { S3UploaderService } from '../s3-uploader/s3-uploader.service';
@@ -28,8 +29,10 @@ import FileValidators from 'src/common/validator/FileValidators';
 import { RequirePermission } from '../common/decorator/permission.decorator';
 import { PermissionsEnum } from '../permission/permission.enums';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @SwaggerAuth()
+@UseGuards(ThrottlerGuard)
 @Controller('users')
 @ApiTags('User')
 @ApiResponse(OpenApiHelper.responseDoc)
