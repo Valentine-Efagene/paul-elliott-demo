@@ -12,7 +12,36 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    example: 12345678,
+    example: 'Pa$Sw0rd',
+  })
+  @IsNotEmpty()
+  @MaxLength(50)
+  // @IsStrongPassword()
+  password: string;
+
+  @ApiProperty({ nullable: true, example: 'Jane' })
+  @IsOptional()
+  firstName?: string;
+
+  @ApiProperty({ nullable: true, example: 'Doe' })
+  @IsOptional()
+  lastName?: string;
+
+  @ApiProperty({ nullable: false, example: 'Canada' })
+  @IsOptional()
+  country?: string;
+}
+
+export class CreateAdminDto {
+  @ApiProperty({
+    example: 'john@admin.com',
+  })
+  @IsNotEmpty()
+  @MaxLength(50)
+  email: string;
+
+  @ApiProperty({
+    example: 'Pa$Sw0rd',
   })
   @IsNotEmpty()
   @MaxLength(50)

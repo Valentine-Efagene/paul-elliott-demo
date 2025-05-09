@@ -18,7 +18,7 @@ import {
 import { User } from './user.entity';
 import { S3UploaderService } from '../s3-uploader/s3-uploader.service';
 import { UserService } from './user.service';
-import { AssignRolesDto, AvatarUploadDto, CreateUserDto, SuspendUserDto, UpdateUserControllerDto } from './user.dto';
+import { AssignRolesDto, AvatarUploadDto, CreateAdminDto, CreateUserDto, SuspendUserDto, UpdateUserControllerDto } from './user.dto';
 import { ApiConsumes, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StandardApiResponse } from '../common/common.dto';
 import OpenApiHelper from '../common/OpenApiHelper';
@@ -45,7 +45,7 @@ export class UserController {
   @SwaggerAuth()
   @Post('create-admin')
   async createAdmin(
-    @Body() createUserDto: CreateUserDto,
+    @Body() createUserDto: CreateAdminDto,
   ): Promise<StandardApiResponse<User>> {
     const data = await this.userService.createAdmin(createUserDto);
     return new StandardApiResponse(HttpStatus.CREATED, ResponseMessage.CREATED, data);

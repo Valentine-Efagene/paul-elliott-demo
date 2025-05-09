@@ -46,6 +46,7 @@ export class UserService {
 
     const entity = this.userRepository.create({
       ...rest,
+      isEmailVerified: true,
       password: hashedPassword
     });
 

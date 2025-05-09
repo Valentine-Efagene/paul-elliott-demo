@@ -31,7 +31,7 @@ export class UserSeeder {
             if (!existingAdmin) {
                 const newAdmin = await this.userService.createAdmin({
                     email,
-                    password: 'XXXXX',
+                    password: 'Pa$Sw0rd',
                     country: 'Canada',
                 })
             }

@@ -161,7 +161,7 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     ) {
         client.join(data.room);
         console.log(`${client.id} joined room: ${data.room}`);
-        this.server.to(data.room).emit('messages', {
+        this.server.to(data.room).emit(SocketChannel.MESSAGES, {
             message: `User ${this.findEmailBySocketId(client.id)} joined the room.`,
             room: data.room,
             from: client.id
@@ -174,7 +174,7 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }) {
         client.leave(data.room);
         console.log(`${client.id} left room: ${data.room}`);
-        this.server.to(data.room).emit('messages', {
+        this.server.to(data.room).emit(SocketChannel.MESSAGES, {
             message: `User ${this.findEmailBySocketId(client.id)} left the room.`,
             room: data.room,
         });
@@ -184,7 +184,8 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     handleGroupMessage(
         @ConnectedSocket() client: Socket,
         @MessageBody() data: {
-            room: string; message: string
+            room: string;
+            message: string
         }) {
         this.server.to(data.room).emit(SocketChannel.MESSAGES, {
             message: data.message,
@@ -192,6 +193,6 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
             sender: this.findEmailBySocketId(client.id)
         });
 
-        console.log('Room message')
+        console.log('Room message', data.message)
     }
 }
